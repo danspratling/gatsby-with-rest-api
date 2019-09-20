@@ -38,10 +38,12 @@ exports.sourceNodes = (
       fetch(`${source}/${endpoint}`)
         .then(response => response.json())
         .then(data => {
-          data.forEach(result => {
-            const nodeData = processResult(result, endpoint)
-            createNode(nodeData)
-          })
+          Array.isArray(data)
+            ? data.forEach(result => {
+                const nodeData = processResult(result, endpoint)
+                createNode(nodeData)
+              })
+            : createNode(processResult(data, endpoint))
         })
     )
   )
