@@ -8,11 +8,13 @@ module.exports = {
   /* Your site config here */
   plugins: [
     {
-      resolve: "gatsby-source-umbraco",
+      resolve: "gatsby-source-rest-api",
       options: {
         key: "<YOUR_API_KEY_HERE>",
-        source: "https://jsonplaceholder.typicode.com",
-        endpoints: ["posts", "users"],
+        endpoints: [
+          "https://jsonplaceholder.typicode.com/posts",
+          "https://jsonplaceholder.typicode.com/users",
+        ],
       },
     },
   ],

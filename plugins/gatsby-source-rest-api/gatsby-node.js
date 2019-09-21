@@ -4,15 +4,17 @@ exports.sourceNodes = (
   configOptions
 ) => {
   const { createNode } = actions
-  const { source } = configOptions
+  const { endpoints } = configOptions
   // Gatsby adds a configOption that's not needed for this plugin, delete it
   delete configOptions.plugins
 
   //strips special characters and makes string camelcase
   const customFormat = str => {
     return str
-      .replace(/(?:^\w|[A-Z]|\b\w)/g, word => word.toUpperCase())
-      .replace(/\s+/g, "")
+      .replace(/^.*\/\/[^\/]+/, "") //Removes domain
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, word => word.toUpperCase()) //Capitalizes strings
+      .replace(/\//g, "") //Removes slashes
+      .replace(/\s+/g, "") //Removes spaces
   }
 
   // Helper function that processes a result to match Gatsby's node structure
@@ -33,9 +35,9 @@ exports.sourceNodes = (
   }
 
   const sources = []
-  configOptions.endpoints.forEach(endpoint =>
+  endpoints.forEach(endpoint =>
     sources.push(
-      fetch(`${source}/${endpoint}`)
+      fetch(`${endpoint}`, {})
         .then(response => response.json())
         .then(data => {
           Array.isArray(data)
